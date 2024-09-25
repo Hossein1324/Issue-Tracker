@@ -1,4 +1,3 @@
-"use client";
 import React from 'react'
 import { Button, Table, ThemePanel } from '@radix-ui/themes'
 import Link from 'next/link'
