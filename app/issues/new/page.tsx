@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { validationSchemas } from '@/app/validationSchemas'
 import { z } from "zod";
 import Spinner from "@/app/components/Spinner";
+import ErrorMessage from "@/app/components/ErrorMessage";
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), { ssr: false })
 type IssueForm = z.infer<typeof validationSchemas>
 const NewIssuePage = () => {
@@ -45,13 +46,13 @@ const NewIssuePage = () => {
                 <TextField.Root placeholder="Title" {...register('title')}>
                     <TextField.Slot />
                 </TextField.Root>
-                {errors.title && <Text color="red" as="p">{errors.title?.message}</Text>}
+                <ErrorMessage>{errors.title?.message}</ErrorMessage>
                 <Controller
                     name="description"
                     control={control}
                     render={({ field }) => <SimpleMDE placeholder="Description" {...field} />}
                 />
-                {errors.description && <Text color="red" as="p">{errors.description.message}</Text>}
+                <ErrorMessage>{errors.description?.message}</ErrorMessage>
                 <Button disabled={isSubmitting} >Submit New Issues{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
