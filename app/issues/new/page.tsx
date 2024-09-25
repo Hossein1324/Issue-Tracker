@@ -9,21 +9,25 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from '@hookform/resolvers/zod'
 import { validationSchemas } from '@/app/validationSchemas'
 import { z } from "zod";
+import Spinner from "@/app/components/Spinner";
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), { ssr: false })
 type IssueForm = z.infer<typeof validationSchemas>
 const NewIssuePage = () => {
 
-    const [error, setError] = useState('')
+    const [error, setError] = useState('');
+    const [isSubmitting, setSubmitting] = useState(false);
     const router = useRouter()
     const { register, control, handleSubmit, formState: { errors } } = useForm<IssueForm>({
         resolver: zodResolver(validationSchemas)
     })
     const onSubmit: SubmitHandler<IssueForm> = async (data) => {
         try {
+            setSubmitting(true);
             await axios.post('/api/issues', data);
             router.push('/issues');
 
         } catch (error) {
+            setSubmitting(true);
             setError('An Unexpected error occurred.');
 
         }
@@ -48,7 +52,7 @@ const NewIssuePage = () => {
                     render={({ field }) => <SimpleMDE placeholder="Description" {...field} />}
                 />
                 {errors.description && <Text color="red" as="p">{errors.description.message}</Text>}
-                <Button >Submit New Issues</Button>
+                <Button disabled={isSubmitting} >Submit New Issues{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     );
