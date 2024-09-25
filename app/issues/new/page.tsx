@@ -1,7 +1,7 @@
 "use client";
 import { Button, TextField, Callout, Text } from "@radix-ui/themes";
-import SimpleMDE from "react-simplemde-editor";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import React, { useState } from "react";
 import axios from "axios";
@@ -9,8 +9,10 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from '@hookform/resolvers/zod'
 import { validationSchemas } from '@/app/validationSchemas'
 import { z } from "zod";
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), { ssr: false })
 type IssueForm = z.infer<typeof validationSchemas>
 const NewIssuePage = () => {
+
     const [error, setError] = useState('')
     const router = useRouter()
     const { register, control, handleSubmit, formState: { errors } } = useForm<IssueForm>({
