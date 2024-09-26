@@ -30,6 +30,7 @@ const IssueFrom = ({ issue }: { issue?: Problem }) => {
             else await axios.post('/api/issues', data)
 
             router.push('/issues');
+            router.refresh();
 
         } catch (error) {
             setSubmitting(false);
@@ -66,5 +67,6 @@ const IssueFrom = ({ issue }: { issue?: Problem }) => {
         </div>
     );
 };
+
 
 export default IssueFrom;
