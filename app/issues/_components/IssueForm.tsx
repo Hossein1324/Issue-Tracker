@@ -7,13 +7,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { zodResolver } from '@hookform/resolvers/zod'
-import { validationSchemas } from '@/app/validationSchemas'
-import { z } from "zod";
+import { issueSchema } from '@/app/validationSchemas'
+import { z } from "zod"
 import Spinner from "@/app/components/Spinner";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { Problem } from "@prisma/client";
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), { ssr: false })
-type IssueFormData = z.infer<typeof validationSchemas>
+type IssueFormData = z.infer<typeof issueSchema>
 
 const IssueFrom = ({ issue }: { issue?: Problem }) => {
 
@@ -21,7 +21,7 @@ const IssueFrom = ({ issue }: { issue?: Problem }) => {
     const [isSubmitting, setSubmitting] = useState(false);
     const router = useRouter()
     const { register, control, handleSubmit, formState: { errors } } = useForm<IssueFormData>({
-        resolver: zodResolver(validationSchemas)
+        resolver: zodResolver(issueSchema)
     })
     const onSubmit: SubmitHandler<IssueFormData> = async (data) => {
         try {
