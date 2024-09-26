@@ -1,7 +1,18 @@
 import React from 'react'
-import IssueFrom from '../../_components/IssueForm'
 import prisma from '@/prisma/client'
 import { notFound } from 'next/navigation'
+import dynamic from 'next/dynamic'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import { Box } from '@radix-ui/themes'
+
+
+const IssueFrom = dynamic(() => import('@/app/issues/_components/IssueForm'), {
+    ssr: false, loading: () => <Box className='max-w-xl'>
+        <Skeleton height='2rem' />
+        <Skeleton height='20rem' />
+    </Box>
+})
 
 interface Props {
     params: { id: string }
