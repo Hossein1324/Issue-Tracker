@@ -26,11 +26,13 @@ const IssueFrom = ({ issue }: { issue?: Problem }) => {
     const onSubmit: SubmitHandler<IssueFormData> = async (data) => {
         try {
             setSubmitting(true);
-            await axios.post('/api/issues', data);
+            if (issue) await axios.patch('/api/issues/' + issue.id, data);
+            else await axios.post('/api/issues', data)
+
             router.push('/issues');
 
         } catch (error) {
-            setSubmitting(true);
+            setSubmitting(false);
             setError('An Unexpected error occurred.');
 
         }
@@ -56,7 +58,10 @@ const IssueFrom = ({ issue }: { issue?: Problem }) => {
                     render={({ field }) => <SimpleMDE placeholder="Description" {...field} />}
                 />
                 <ErrorMessage>{errors.description?.message}</ErrorMessage>
-                <Button disabled={isSubmitting} >Submit New Issues{isSubmitting && <Spinner />}</Button>
+                <Button disabled={isSubmitting} >
+                    {issue ? 'Update Issue' : 'Submit New Issue'}{' '}
+                    {isSubmitting && <Spinner />}
+                </Button>
             </form>
         </div>
     );
